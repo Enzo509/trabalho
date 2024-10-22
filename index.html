@@ -139,3 +139,41 @@ public class AttendanceServlet extends HttpServlet {
         response.getWriter().println("<p>Student 3: " + student3 + "</p>");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// Inicialize o Firebase
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_DOMINIO.firebaseapp.com",
+  databaseURL: "https://SEU_DATABASE.firebaseio.com",
+  projectId: "SEU_ID_PROJETO",
+  appId: "SEU_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+
+// Login com email e senha
+firebase.auth().signInWithEmailAndPassword('email@exemplo.com', 'senha123')
+  .then((user) => {
+    console.log("Usuário logado:", user.user.uid);
+    
+    // Registrar a presença no banco de dados
+    const userId = user.user.uid;
+    const chamadaId = "chamada_01";
+    firebase.database().ref(`chamadas/${chamadaId}/presencas/${userId}`).set({
+      presente: true,
+      timestamp: Date.now()
+    });
+  })
+  .catch((error) => {
+    console.error("Erro ao logar:", error);
+  });
